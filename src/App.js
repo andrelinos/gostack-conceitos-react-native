@@ -13,13 +13,11 @@ import {
 } from 'react-native';
 
 export default function App() {
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [techs, setTechs] = useState('');
   const [repositories, setRepositories] = useState([]);
 
   async function loadRepositories() {
     const { data } = await api.get('repositories');
+
     setRepositories(data);
   }
 
@@ -56,7 +54,7 @@ export default function App() {
                   {/* <Text style={styles.tech}>{repository.techs}</Text> */}
                   {repository.techs.map((tech) => (
                     <Text key={tech} style={styles.tech}>
-                      {tech}
+                      {tech}1
                     </Text>
                   ))}
                 </View>
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#04d361',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    color: '#fff',
+    color: '#999',
     borderRadius: 2,
   },
   likesContainer: {
