@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { TextInput } from 'react-native';
 
 import api from './services/api';
 
@@ -14,6 +15,9 @@ import {
 
 export default function App() {
   const [repositories, setRepositories] = useState([]);
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+  const [techs, setTechs] = useState('');
 
   async function loadRepositories() {
     const { data } = await api.get('repositories');
@@ -24,6 +28,20 @@ export default function App() {
   useEffect(() => {
     loadRepositories();
   }, []);
+
+  async function handleAddRepository() {
+    const response = await api.post('repositories', {
+      title,
+      url,
+      techs: techs.split(',').map((tech) => tech.trim()),
+    });
+
+    setTitle('');
+    setUrl('');
+    setTechs('');
+
+    setRepositories([...repositories, response.data]);
+  }
 
   async function handleLikeRepository(id) {
     const { data: repositoryLiked } = await api.post(`repositories/${id}/like`);
@@ -50,6 +68,38 @@ export default function App() {
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
       <SafeAreaView style={styles.container}>
+        <View style={styles.formInput}>
+          <TextInput
+            style={styles.Input}
+            value={title}
+            onChangeText={setTitle}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Insira o título..."
+          />
+          <TextInput
+            style={styles.Input}
+            value={url}
+            onChangeText={setUrl}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Insira a url..."
+          />
+          <TextInput
+            style={styles.Input}
+            value={techs}
+            onChangeText={setTechs}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Insira o título..."
+          />
+          <TouchableOpacity
+            style={styles.buttonAdd}
+            onPress={() => handleAddRepository()}>
+            <Text style={styles.buttonText}>Adicionar</Text>
+          </TouchableOpacity>
+        </View>
+
         <FlatList
           data={repositories}
           keyExtractor={(repository) => repository.id}
@@ -105,6 +155,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#7159c1',
+  },
+  formInput: {
+    width: '100%',
+    height: 'auto',
+    marginTop: 10,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 8,
+  },
+  Input: {
+    width: 300,
+    height: 35,
+    borderRadius: 5,
+    borderWidth: 1,
+    fontSize: 14,
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginBottom: 7,
+    borderColor: '#999',
+    backgroundColor: '#eee',
+  },
+  buttonAdd: {
+    width: 300,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#00b894',
+    marginBottom: 12,
   },
   repositoryContainer: {
     marginBottom: 15,
