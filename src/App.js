@@ -38,6 +38,14 @@ export default function App() {
     setRepositories(repoUpdate);
   }
 
+  async function handleRemoveRepository(id) {
+    await api.delete(`repositories/${id}`);
+    const repositoriesUpdated = repositories.filter(
+      (repository) => repository.id !== id,
+    );
+    setRepositories([...repositoriesUpdated]);
+  }
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -67,14 +75,23 @@ export default function App() {
                     {repository.likes ? repository.likes : '0'} curtidas
                   </Text>
                 </View>
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handleLikeRepository(repository.id)}
+                    // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
+                    testID={`like-button-${repository.id}`}>
+                    <Text style={styles.buttonText}>Curtir</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => handleLikeRepository(repository.id)}
-                  // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
-                  testID={`like-button-${repository.id}`}>
-                  <Text style={styles.buttonText}>Curtir</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttonDelete}
+                    onPress={() => handleRemoveRepository(repository.id)}
+                    // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
+                    testID={`like-button-${repository.id}`}>
+                    <Text style={styles.buttonText}>Remover</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </>
           )}
@@ -123,13 +140,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 10,
   },
-  button: {
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 10,
+  },
+  button: {
+    flex: 1,
+    maxWidth: 150,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
     backgroundColor: '#7159c1',
+  },
+  buttonDelete: {
+    flex: 1,
+    maxWidth: 150,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: '#ff7675',
   },
   buttonText: {
     fontSize: 16,
