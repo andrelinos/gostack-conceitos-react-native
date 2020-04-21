@@ -30,6 +30,9 @@ export default function App() {
   }, []);
 
   async function handleAddRepository() {
+    if (title === '' || url === '' || techs === '') {
+      return;
+    }
     const response = await api.post('repositories', {
       title,
       url,
@@ -41,6 +44,14 @@ export default function App() {
     setTechs('');
 
     setRepositories([...repositories, response.data]);
+  }
+
+  async function handleRemoveRepository(id) {
+    await api.delete(`repositories/${id}`);
+    const repositoriesUpdated = repositories.filter(
+      (repository) => repository.id !== id,
+    );
+    setRepositories([...repositoriesUpdated]);
   }
 
   async function handleLikeRepository(id) {
@@ -56,14 +67,6 @@ export default function App() {
     setRepositories(repoUpdate);
   }
 
-  async function handleRemoveRepository(id) {
-    await api.delete(`repositories/${id}`);
-    const repositoriesUpdated = repositories.filter(
-      (repository) => repository.id !== id,
-    );
-    setRepositories([...repositoriesUpdated]);
-  }
-
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -76,6 +79,7 @@ export default function App() {
             autoCapitalize="none"
             autoCorrect={false}
             placeholder="Insira o título..."
+            required
           />
           <TextInput
             style={styles.Input}
