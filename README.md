@@ -6,7 +6,7 @@
   Desafio 04: Conceitos do ReactJS
 </h3>
 
-<img alt="GoStack" src="https://github.com/andrelinos/gostack-conceitos-react-native/blob/master/desafio03gostack11.png" />
+<img alt="GoStack" src="https://github.com/andrelinos/gostack-conceitos-react-native/blob/master/desafio04gostack11.png" />
 
 
 ### Funcionalidades da aplicação
