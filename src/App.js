@@ -158,7 +158,7 @@ export default function App() {
                     style={styles.buttonDelete}
                     onPress={() => handleRemoveRepository(repository.id)}
                     // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
-                    testID={`like-button-${repository.id}`}>
+                    testID={`delete-button-${repository.id}`}>
                     <Text style={styles.buttonText}>Remover</Text>
                   </TouchableOpacity>
                 </View>
